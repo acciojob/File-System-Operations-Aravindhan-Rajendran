@@ -1,16 +1,17 @@
 const fs = require('fs');
 
+// Get the JSON file path from the command-line arguments
 const jsonFilePath = process.argv[2];
 
+// Read the JSON file asynchronously
 fs.readFile(jsonFilePath, 'utf8', (err, data) => {
   if (err) {
     console.error(`Error reading file: ${err}`);
     return;
   }
 
+  // Parse the JSON data
   const users = JSON.parse(data);
-
-  // TODO: Perform the required operations on the users data
 
   // Print the total number of users
   console.log(`Total number of users: ${users.length}`);
