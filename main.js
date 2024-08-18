@@ -6,19 +6,22 @@ const jsonFilePath = process.argv[2];
 // Read the JSON file asynchronously
 fs.readFile(jsonFilePath, 'utf8', (err, data) => {
   if (err) { // If there is an error while reading the file, handle it here.
-    console.error(`Error reading file: ${err}`);
+    fs.writeFileSync('output.txt', `Error reading file: ${err}\n`);
     return; // Exit the function early if there is an error.
   }
 
   // Parse the JSON data from the file into a JavaScript object/array
   const users = JSON.parse(data);
 
+  // Prepare the output data to be written to output.txt
+  let output = '';
+
   // Print the total number of users
-  console.log(`Total number of users: ${users.length}`);
+  output += `Total number of users: ${users.length}\n`;
 
   // Find the user with the highest score and print their details
   const highestScoreUser = users.reduce((prev, current) => (prev.score > current.score ? prev : current));
-  console.log('User with the highest score:', highestScoreUser);
+  output += `User with the highest score: ${JSON.stringify(highestScoreUser, null, 2)}\n`;
 
   // Sort the users based on their scores in descending order
   users.sort((a, b) => b.score - a.score);
@@ -26,9 +29,12 @@ fs.readFile(jsonFilePath, 'utf8', (err, data) => {
   // Write the sorted data back to the JSON file
   fs.writeFile(jsonFilePath, JSON.stringify(users, null, 2), (err) => {
     if (err) { // Handle any error that might occur during the write operation.
-      console.error(`Error writing file: ${err}`);
+      fs.writeFileSync('output.txt', `Error writing file: ${err}\n`);
       return;
     }
-    console.log('Data sorted and written back to the JSON file.');
+    output += 'Data sorted and written back to the JSON file.\n';
+
+    // Write the output to output.txt
+    fs.writeFileSync('output.txt', output);
   });
 });
