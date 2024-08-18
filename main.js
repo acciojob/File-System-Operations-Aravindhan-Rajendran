@@ -3,6 +3,11 @@ const fs = require('fs'); // Import the file system module to handle file operat
 // Get the JSON file path from the command-line arguments
 const jsonFilePath = process.argv[2];
 
+if (!jsonFilePath) {
+  console.error('Error: No file path provided. Please provide the path to the JSON file as a command-line argument.');
+  process.exit(1); // Exit the process with an error code
+}
+
 // Read the JSON file asynchronously
 fs.readFile(jsonFilePath, 'utf8', (err, data) => {
   if (err) { // If there is an error while reading the file, handle it here.
