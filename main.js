@@ -1,16 +1,16 @@
-const fs = require('fs');
+const fs = require('fs'); // Import the file system module to handle file operations.
 
 // Get the JSON file path from the command-line arguments
 const jsonFilePath = process.argv[2];
 
 // Read the JSON file asynchronously
 fs.readFile(jsonFilePath, 'utf8', (err, data) => {
-  if (err) {
+  if (err) { // If there is an error while reading the file, handle it here.
     console.error(`Error reading file: ${err}`);
-    return;
+    return; // Exit the function early if there is an error.
   }
 
-  // Parse the JSON data
+  // Parse the JSON data from the file into a JavaScript object/array
   const users = JSON.parse(data);
 
   // Print the total number of users
@@ -25,7 +25,7 @@ fs.readFile(jsonFilePath, 'utf8', (err, data) => {
 
   // Write the sorted data back to the JSON file
   fs.writeFile(jsonFilePath, JSON.stringify(users, null, 2), (err) => {
-    if (err) {
+    if (err) { // Handle any error that might occur during the write operation.
       console.error(`Error writing file: ${err}`);
       return;
     }
