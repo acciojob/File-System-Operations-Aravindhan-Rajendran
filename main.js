@@ -1,45 +1,51 @@
 const fs = require('fs');
 
-// Get the JSON file path from the command-line arguments
-const jsonFilePath = process.argv[2];
+// File path for the JSON file
+const filePath = './users.json';
 
-if (!jsonFilePath) {
-  console.error('Error: No JSON file path provided.');
-  process.exit(1);
+// Function to read the JSON data
+function readJSONData() {
+  const data = fs.readFileSync(filePath, 'utf-8');
+  return JSON.parse(data);
 }
 
-// Read the JSON file asynchronously
-fs.readFile(jsonFilePath, 'utf8', (err, data) => {
-  if (err) {
-    console.error(`Error reading file: ${err}`);
-    process.exit(1);
-  }
+// Function to write the JSON data back to the file
+function writeJSONData(data) {
+  fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf-8');
+}
 
-  // Parse the JSON data
-  let users;
+// Function to process the data (e.g., adding a new user)
+function processUserData(users) {
+  // Example: Add a new user
+  const newUser = {
+    id: 3,
+    name: 'Charlie',
+    age: 28,
+    email: 'charlie@example.com'
+  };
+  users.push(newUser);
+
+  // You can perform other operations like updating or deleting users here
+  return users;
+}
+
+// Main function
+function main() {
   try {
-    users = JSON.parse(data);
-  } catch (parseError) {
-    console.error(`Error parsing JSON data: ${parseError}`);
-    process.exit(1);
+    // Read the existing user data
+    const users = readJSONData();
+
+    // Process the data
+    const updatedUsers = processUserData(users);
+
+    // Write the updated data back to the file
+    writeJSONData(updatedUsers);
+
+    console.log('User data has been updated successfully.');
+  } catch (error) {
+    console.error('Error processing JSON data:', error);
   }
+}
 
-  // Print the total number of users
-  console.log(`Total number of users: ${users.length}`);
-
-  // Find the user with the highest score and print their details
-  const highestScoreUser = users.reduce((prev, current) => (prev.score > current.score ? prev : current));
-  console.log('User with the highest score:', highestScoreUser);
-
-  // Sort the users based on their scores in descending order
-  users.sort((a, b) => b.score - a.score);
-
-  // Write the sorted data back to the JSON file
-  fs.writeFile(jsonFilePath, JSON.stringify(users, null, 2), (err) => {
-    if (err) {
-      console.error(`Error writing file: ${err}`);
-      process.exit(1);
-    }
-    console.log('Data sorted and written back to the JSON file.');
-  });
-});
+// Run the main function
+main();
